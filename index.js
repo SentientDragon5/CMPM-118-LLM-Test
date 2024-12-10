@@ -1,13 +1,23 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import promptSync from 'prompt-sync';
 import * as dotenv from 'dotenv';
 
 dotenv.config(); // Load environment variables from .env file
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 const prompt = promptSync();
+
+// Create a function to call the Langchain API
+async function chatCompletion(text) {
+  const model = new ChatGoogleGenerativeAI({
+    modelName: "gemini-1.5-flash",
+    temperature: 0.9,
+  });
+
+  const response = await model.invoke(text);
+
+  return "AI:" + response.content
+}
 
 async function chatWithAI() {
   console.log("Hello! I'm an AI. How can I help you today?");
@@ -19,8 +29,8 @@ async function chatWithAI() {
       break;
     }
 
-    const result = await model.generateContent(prompt);
-    console.log(result.response.text());
+    const result = await chatCompletion(prompt);
+    console.log(result);
   }
 }
 
