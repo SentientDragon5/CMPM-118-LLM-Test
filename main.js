@@ -37,13 +37,34 @@ if (sendButton) {
 } else {
   console.error("Send button not found!");
 }
-
+messageInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault(); // Prevent the default newline behavior
+    sendMessage();
+  }
+});
 function displayMessage(sender, message) {
-  const sanitizedSender = sender.replace(/ /g, "-"); // Replace all spaces with hyphens
+  const sanitizedSender = sender.replace(/ /g, "-");
   const messageElement = document.createElement("div");
   messageElement.classList.add(sanitizedSender);
-  messageElement.textContent = message;
+
+  // Add class for user or bot:
+  messageElement.classList.add(sender === "You" ? "user" : "other");
+
+  const senderLabel = document.createElement("span");
+  senderLabel.textContent = sender + ": ";
+  senderLabel.style.fontWeight = "bold";
+
+  const messageWithLineBreaks = message.replace(/\n/g, "<br>");
+
+  messageElement.appendChild(senderLabel);
+  messageElement.innerHTML += messageWithLineBreaks;
+
   chatOutput.appendChild(messageElement);
+
+  const spacer = document.createElement("div");
+  spacer.style.marginBottom = "10px";
+  chatOutput.appendChild(spacer);
 }
 
 function sendMessage() {
