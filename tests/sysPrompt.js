@@ -21,36 +21,3 @@ const formated = await promptTemplate.format({
 });
 const resp = await model.invoke(formated);
 console.log("resp: ", resp.content);
-//return;
-// const llmChain = new LLMChain({
-//   llm: geminiModel,
-//   prompt: promptTemplate,
-// });
-
-// Create a function to call the Langchain API
-async function chatCompletion(text) {
-  const response = await model.invoke(text);
-
-  return "AI:" + response.content;
-}
-
-async function chatWithAI() {
-  console.log("Hello! I'm an AI. How can I help you today?");
-
-  while (true) {
-    const prompt = await askForInput();
-    if (prompt.toLowerCase() === "e") {
-      console.log("Goodbye!");
-      break;
-    }
-
-    const result = await chatCompletion(prompt);
-    console.log(result);
-  }
-}
-
-async function askForInput() {
-  return prompt("You: ");
-}
-
-//chatWithAI();
