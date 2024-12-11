@@ -8,7 +8,6 @@ import {
   ToolMessage,
   SystemMessage,
 } from "@langchain/core/messages";
-import promptSync from "prompt-sync";
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -56,7 +55,6 @@ const toolsByName = {
   multiply: multiplyTool,
 };
 
-const prompt = promptSync();
 async function humanTurn(response) {
   messages.push(new HumanMessage(response));
   return response;
@@ -85,7 +83,7 @@ async function aiTurn(text) {
 }
 
 var log;
-async function chatWithAI(logFunc) {
+async function chatWithAI(logFunc, userInput) {
   log = logFunc;
   log("Script", 'Chat starting. to quit return "e"');
 
@@ -94,14 +92,14 @@ async function chatWithAI(logFunc) {
   log("System", sysPrompt);
 
   while (true) {
-    const humanPrompt = await humanTurn(prompt("You : "));
+    const humanPrompt = await humanTurn(userInput());
     if (humanPrompt.toLowerCase() === "e") {
       log("Script", "System Quitting");
       break;
     }
     log("You", humanPrompt);
 
-    const result = await aiTurn(prompt);
+    const result = await aiTurn(messages);
     log("AI", result);
   }
 }
