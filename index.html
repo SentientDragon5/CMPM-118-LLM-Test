@@ -2,28 +2,41 @@
 <html>
 <head>
 <style>
-#chat-container {
-  width: 300px;
-  height: 400px;
-  border: 1px solid #ccc;
+body {
+  display: flex;          /* Enable flexbox for the body */
+  justify-content: space-around; /* Distribute space around items */
 }
+
+#app {
+  border: 20px solid #451aaa; 
+  margin: auto;
+}
+
+#chat-container {
+  border: 50px solid #dc0e0e;
+  margin: auto;
+}
+
 #chat-output {
   height: 300px;
   overflow-y: scroll;
+  border: 20px solid #1f8977;
   padding: 10px;
 }
+
 .user {
   text-align: right;
 }
+
 .other {
   text-align: left;
 }
 </style>
-
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body>
+
+<div id="app"></div>  </div> 
 
 <div id="chat-container">
   <div id="chat-output"></div>
@@ -31,7 +44,7 @@
   <button id="send-button">Send</button>
 </div>
 
-<div id="app"></div>
+
 <script type="module" src="llmChat.js"></script> 
 <script type="module" src="main.js"></script> 
 
