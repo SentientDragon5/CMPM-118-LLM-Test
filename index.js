@@ -1,56 +1,103 @@
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
-import { PromptTemplate } from "@langchain/core/prompts";
-import promptSync from "prompt-sync";
+import { tool } from "@langchain/core/tools";
+import { z } from "zod";
 import * as dotenv from "dotenv";
+import {
+  HumanMessage,
+  AIMessage,
+  ToolMessage,
+  SystemMessage,
+} from "@langchain/core/messages";
+import promptSync from "prompt-sync";
 
 dotenv.config(); // Load environment variables from .env file
 
-const prompt = promptSync();
-
-const template = "write back in only limericks";
-const promptTemplate = new PromptTemplate({
-  template: "write back in only {style}",
-  inputVariables: ["style"],
-});
-const model = new ChatGoogleGenerativeAI({
+const llm = new ChatGoogleGenerativeAI({
   modelName: "gemini-1.5-flash",
-  temperature: 0.9,
+  temperature: 0.5,
 });
-const formated = await promptTemplate.format({
-  style: "5 line limerick",
-});
-const resp = await model.invoke(formated);
-console.log("resp: ", resp.content);
-//return;
-// const llmChain = new LLMChain({
-//   llm: geminiModel,
-//   prompt: promptTemplate,
-// });
 
-// Create a function to call the Langchain API
-async function chatCompletion(text) {
-  const response = await model.invoke(text);
+const addTool = tool(
+  async ({ a, b }) => {
+    console.log("ADDING A AND B");
+    return a + b;
+  },
+  {
+    name: "add",
+    schema: z.object({
+      a: z.number(),
+      b: z.number(),
+    }),
+    description: "Adds a and b.",
+  }
+);
+
+const multiplyTool = tool(
+  async ({ a, b }) => {
+    console.log("MULTIPLYING A AND B");
+    return a * b;
+  },
+  {
+    name: "multiply",
+    schema: z.object({
+      a: z.number(),
+      b: z.number(),
+    }),
+    description: "Multiplies a and b.",
+  }
+);
+
+const tools = [addTool, multiplyTool];
+const llmWithTools = llm.bindTools(tools);
+const messages = [];
+console.log("Script: Tools bound");
+
+const toolsByName = {
+  add: addTool,
+  multiply: multiplyTool,
+};
+
+const prompt = promptSync();
+async function humanTurn() {
+  const response = prompt("You: ");
+  messages.push(new HumanMessage(response));
+  return response;
+}
+async function aiTurn(text) {
+  const response = await llmWithTools.invoke(messages);
+  messages.push(response);
+
+  for (const toolCall of response.tool_calls) {
+    const selectedTool = toolsByName[toolCall.name];
+    const result = await selectedTool.invoke(toolCall);
+
+    const toolMessage = new ToolMessage({
+      toolName: toolCall.name,
+      content: result.toString(),
+    });
+    messages.push(toolMessage);
+  }
 
   return "AI:" + response.content;
 }
 
 async function chatWithAI() {
-  console.log("Hello! I'm an AI. How can I help you today?");
+  console.log('Script: Chat starting. to quit return "e"');
+
+  const sysPrompt = "I am an AI and I only speak in Limericks";
+  messages.push(new SystemMessage(sysPrompt));
+  console.log("Sys: " + sysPrompt);
 
   while (true) {
-    const prompt = await askForInput();
-    if (prompt.toLowerCase() === "e") {
-      console.log("Goodbye!");
+    const humanPrompt = await humanTurn();
+    if (humanPrompt.toLowerCase() === "e") {
+      console.log("Script: System Quitting");
       break;
     }
 
-    const result = await chatCompletion(prompt);
+    const result = await aiTurn(prompt);
     console.log(result);
   }
 }
 
-async function askForInput() {
-  return prompt("You: ");
-}
-
-//chatWithAI();
+chatWithAI();
