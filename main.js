@@ -65,6 +65,8 @@ function displayMessage(sender, message) {
   const spacer = document.createElement("div");
   spacer.style.marginBottom = "10px";
   chatOutput.appendChild(spacer);
+
+  chatOutput.scrollTop = chatOutput.scrollHeight;
 }
 
 function sendMessage() {
@@ -77,4 +79,4 @@ async function log(user, text) {
   console.log(user, ": ", text);
   displayMessage(user, text);
 }
-initConvo(log);
+initConvo(log, []);
