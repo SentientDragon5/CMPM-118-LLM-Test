@@ -95,6 +95,7 @@ async function initConvo(logFunc, moreTools) {
   moreTools.forEach((tool) => {
     toolsByName[tool.name] = tool;
   });
+  console.log("TOOLS initiated: ", tools);
 
   const sysPrompt = "I am an AI and I only speak in Limericks";
   messages.push(new SystemMessage(sysPrompt));

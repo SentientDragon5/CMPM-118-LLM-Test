@@ -7,6 +7,9 @@ export class Game extends Phaser.Scene {
     this.my = my;
     my.objects.push("Such and such");
     console.log(my);
+
+    // Add tools here
+    my.tools.push(...[this.displayTool]);
   }
 
   preload() {
