@@ -8,13 +8,14 @@ import {
   ToolMessage,
   SystemMessage,
 } from "@langchain/core/messages";
-import promptSync from "prompt-sync";
 
-dotenv.config(); // Load environment variables from .env file
+console.log("WOrking up until now");
+//dotenv.config(); // Load environment variables from .env file
 
 const llm = new ChatGoogleGenerativeAI({
   modelName: "gemini-1.5-flash",
   temperature: 0.5,
+  apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
 });
 
 const addTool = tool(
@@ -50,16 +51,14 @@ const multiplyTool = tool(
 const tools = [addTool, multiplyTool];
 const llmWithTools = llm.bindTools(tools);
 const messages = [];
-console.log("Script: Tools bound");
 
 const toolsByName = {
   add: addTool,
   multiply: multiplyTool,
 };
 
-const prompt = promptSync();
-async function humanTurn() {
-  const response = prompt("You: ");
+async function humanTurn(response) {
+  if (response == "") return ""; //we cant submit empty strings to gemini
   messages.push(new HumanMessage(response));
   return response;
 }
@@ -76,31 +75,29 @@ async function aiTurn(text) {
       content: result.toString(),
     });
     messages.push(toolMessage);
-    console.log("Tool: " + toolMessage.content);
+    log("Tool", toolMessage.content);
   }
 
-  response = await llmWithTools.invoke(messages);
-  messages.push(response);
-  return "AI: " + response.content;
+  if (response.tool_calls.length > 0) {
+    response = await llmWithTools.invoke(messages);
+    messages.push(response);
+  }
+  return response.content;
 }
 
-async function chatWithAI() {
-  console.log('Script: Chat starting. to quit return "e"');
+var log;
+async function initConvo(logFunc) {
+  log = logFunc;
 
   const sysPrompt = "I am an AI and I only speak in Limericks";
   messages.push(new SystemMessage(sysPrompt));
-  console.log("Sys: " + sysPrompt);
-
-  while (true) {
-    const humanPrompt = await humanTurn();
-    if (humanPrompt.toLowerCase() === "e") {
-      console.log("Script: System Quitting");
-      break;
-    }
-
-    const result = await aiTurn(prompt);
-    console.log(result);
-  }
+  log("System", sysPrompt);
+}
+async function promptConvo(prompt) {
+  const humanPrompt = await humanTurn(prompt);
+  log("You", humanPrompt);
+  const result = await aiTurn(messages);
+  log("AI", result);
 }
 
-chatWithAI();
+export { initConvo, promptConvo };
