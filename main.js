@@ -1,11 +1,12 @@
 //import { init } from "z3-solver";
 import { initConvo, promptConvo } from "./llmChat.js";
 
+import { Game } from "./src/Scenes/Game";
 // const { Context } = await init();
 
 // var cursors;
 const SCALE = 2.0;
-var my = { sprite: {}, objects: {} };
+var my = { sprite: {}, objects: [] };
 
 console.log(my);
 
@@ -23,7 +24,7 @@ let config = {
   },
 };
 function create() {
-  this.scene.add("Load", new Load(my), true); // Start the scene and pass myData
+  this.scene.add("Game", new Game(my), true); // Start the scene and pass myData
 }
 
 const game = new Phaser.Game(config);
