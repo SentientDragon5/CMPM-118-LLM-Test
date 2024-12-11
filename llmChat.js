@@ -50,7 +50,6 @@ const multiplyTool = tool(
 const tools = [addTool, multiplyTool];
 const llmWithTools = llm.bindTools(tools);
 const messages = [];
-console.log("Script: Tools bound");
 
 const toolsByName = {
   add: addTool,
@@ -58,8 +57,7 @@ const toolsByName = {
 };
 
 const prompt = promptSync();
-async function humanTurn() {
-  const response = prompt("You: ");
+async function humanTurn(response) {
   messages.push(new HumanMessage(response));
   return response;
 }
@@ -76,31 +74,36 @@ async function aiTurn(text) {
       content: result.toString(),
     });
     messages.push(toolMessage);
-    console.log("Tool: " + toolMessage.content);
+    log("Tool", toolMessage.content);
   }
 
-  response = await llmWithTools.invoke(messages);
-  messages.push(response);
-  return "AI: " + response.content;
+  if (response.tool_calls.length > 0) {
+    response = await llmWithTools.invoke(messages);
+    messages.push(response);
+  }
+  return response.content;
 }
 
-async function chatWithAI() {
-  console.log('Script: Chat starting. to quit return "e"');
+var log;
+async function chatWithAI(logFunc) {
+  log = logFunc;
+  log("Script", 'Chat starting. to quit return "e"');
 
   const sysPrompt = "I am an AI and I only speak in Limericks";
   messages.push(new SystemMessage(sysPrompt));
-  console.log("Sys: " + sysPrompt);
+  log("System", sysPrompt);
 
   while (true) {
-    const humanPrompt = await humanTurn();
+    const humanPrompt = await humanTurn(prompt("You : "));
     if (humanPrompt.toLowerCase() === "e") {
-      console.log("Script: System Quitting");
+      log("Script", "System Quitting");
       break;
     }
+    log("You", humanPrompt);
 
     const result = await aiTurn(prompt);
-    console.log(result);
+    log("AI", result);
   }
 }
 
-chatWithAI();
+export { chatWithAI };
