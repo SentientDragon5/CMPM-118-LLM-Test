@@ -14,6 +14,8 @@ export class Game extends Phaser.Scene {
 
   preload() {
     this.load.setPath("./assets/");
+
+    this.load.image("blue", "blue_townie.png");
   }
 
   create() {
@@ -27,6 +29,8 @@ export class Game extends Phaser.Scene {
   displayTool = tool(
     async ({ sprite, x, y }) => {
       console.log("Displaying " + sprite + " at ", x, ",", y);
+      this.my.objects.push(this.add.sprite(x, y, "blue"));
+
       return sprite + " displayed at " + x + " , " + y; // returns for the log and for the ai to know
     },
     {
