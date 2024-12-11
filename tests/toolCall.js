@@ -2,52 +2,78 @@ import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { tool } from "@langchain/core/tools";
 import { z } from "zod";
 import * as dotenv from "dotenv";
+import { HumanMessage, AIMessage, ToolMessage } from "@langchain/core/messages";
 
 dotenv.config(); // Load environment variables from .env file
 
 const llm = new ChatGoogleGenerativeAI({
   modelName: "gemini-1.5-flash",
-  temperature: 0.9,
+  temperature: 0,
 });
 
-/**
- * Note that the descriptions here are crucial, as they will be passed along
- * to the model along with the class name.
- */
-const calculatorSchema = z.object({
-  operation: z
-    .enum(["add", "subtract", "multiply", "divide"])
-    .describe("The type of operation to execute."),
-  number1: z.number().describe("The first number to operate on."),
-  number2: z.number().describe("The second number to operate on."),
-});
-
-const calculatorTool = tool(
-  async ({ operation, number1, number2 }) => {
-    console.log("====== Use Tool =====");
-    // Functions must return strings
-    if (operation === "add") {
-      return `${number1 + number2}`;
-    } else if (operation === "subtract") {
-      return `${number1 - number2}`;
-    } else if (operation === "multiply") {
-      return `${number1 * number2}`;
-    } else if (operation === "divide") {
-      return `${number1 / number2}`;
-    } else {
-      throw new Error("Invalid operation.");
-    }
+const addTool = tool(
+  async ({ a, b }) => {
+    return a + b;
   },
   {
-    name: "calculator",
-    description: "Can perform mathematical operations.",
-    schema: calculatorSchema,
+    name: "add",
+    schema: z.object({
+      a: z.number(),
+      b: z.number(),
+    }),
+    description: "Adds a and b.",
   }
 );
 
-const llmWithTools = llm.bindTools([calculatorTool]);
+const multiplyTool = tool(
+  async ({ a, b }) => {
+    return a * b;
+  },
+  {
+    name: "multiply",
+    schema: z.object({
+      a: z.number(),
+      b: z.number(),
+    }),
+    description: "Multiplies a and b.",
+  }
+);
 
-const res = await llmWithTools.invoke("What is 3 * 12");
+const tools = [addTool, multiplyTool];
 
-res.tool_calls;
-console.log(res);
+const llmWithTools = llm.bindTools(tools);
+console.log("==== E ====");
+
+const messages = [new HumanMessage("What is 3 * 12? Also, what is 11 + 49?")];
+
+const aiMessage = await llmWithTools.invoke(messages);
+
+console.log(aiMessage);
+
+messages.push(aiMessage);
+console.log("==== D ====");
+
+const toolsByName = {
+  add: addTool,
+  multiply: multiplyTool,
+};
+
+console.log("==== A ====");
+for (const toolCall of aiMessage.tool_calls) {
+  const selectedTool = toolsByName[toolCall.name];
+  const result = await selectedTool.invoke(toolCall);
+
+  // Wrap the result in a ToolMessage
+  const toolMessage = new ToolMessage({
+    toolName: toolCall.name,
+    content: result.toString(), // Convert the result to a string
+  });
+
+  messages.push(toolMessage);
+}
+console.log("==== B ====");
+
+console.log(messages);
+
+await llmWithTools.invoke(messages);
+console.log("==== C ====");
