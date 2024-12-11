@@ -3,25 +3,35 @@
 <head>
 <style>
 body {
-  display: flex;          /* Enable flexbox for the body */
-  justify-content: space-around; /* Distribute space around items */
+  display: flex;
+  justify-content: center; /* Center the chat container */
+  align-items: center;     /* Center vertically */
+  min-height: 100vh;      /* Ensure body takes up full viewport height */
+  background-color: #121212; /* Dark background */
+  font-family: sans-serif;
+  color: #eee;          /* Light text color */
 }
 
 #app {
-  border: 20px solid #451aaa; 
-  margin: auto;
+    padding: 20px;
 }
 
 #chat-container {
-  border: 50px solid #dc0e0e;
-  margin: auto;
+  background-color: #242424;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  width: 80%;
+  max-width: 600px;
 }
 
 #chat-output {
   height: 300px;
   overflow-y: scroll;
-  border: 20px solid #1f8977;
+  border: none; /* Remove the border */
   padding: 10px;
+  background-color: #333; /* Slightly lighter background for chat output */
+  border-radius: 5px;
 }
 
 .user {
@@ -31,19 +41,43 @@ body {
 .other {
   text-align: left;
 }
+
+#message-input {
+  width: calc(100% - 80px); /* Adjust width to accommodate button */
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #555;
+  border-radius: 5px;
+  background-color: #333;
+  color: #eee;
+  resize: vertical;
+}
+
+#send-button {
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #5942c1; /* Purple button */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Add a transition effect */
+}
+
+#send-button:hover {
+  background-color: #7a5dfb; /* Lighter purple on hover */
+}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body>
-
-<div id="app"></div>  </div> 
+    <div id="app"></div>  </div> 
 
 <div id="chat-container">
   <div id="chat-output"></div>
   <textarea id="message-input"></textarea>
   <button id="send-button">Send</button>
 </div>
-
 
 <script type="module" src="llmChat.js"></script> 
 <script type="module" src="main.js"></script> 

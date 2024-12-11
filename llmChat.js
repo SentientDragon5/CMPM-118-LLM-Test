@@ -88,7 +88,6 @@ async function aiTurn(text) {
 var log;
 async function initConvo(logFunc) {
   log = logFunc;
-  log("Script", 'Chat starting. to quit return "e"');
 
   const sysPrompt = "I am an AI and I only speak in Limericks";
   messages.push(new SystemMessage(sysPrompt));
