@@ -13,6 +13,7 @@ const llm = new ChatGoogleGenerativeAI({
 
 const addTool = tool(
   async ({ a, b }) => {
+    console.log("ADDING A AND B");
     return a + b;
   },
   {
@@ -27,6 +28,7 @@ const addTool = tool(
 
 const multiplyTool = tool(
   async ({ a, b }) => {
+    console.log("MULTIPLYING A AND B");
     return a * b;
   },
   {
