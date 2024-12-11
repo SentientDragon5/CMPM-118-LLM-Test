@@ -77,6 +77,12 @@ body {
 }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script src="/z3-built.js"></script>
+<script>
+  globalThis.global = { initZ3: globalThis.initZ3 };
+</script>
+
 </head>
 <body>
     <div id="app"></div>  </div> 

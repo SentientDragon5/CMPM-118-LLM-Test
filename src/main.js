@@ -1,15 +1,12 @@
-//import { init } from "z3-solver";
+import { init } from "z3-solver";
 import { tool } from "@langchain/core/tools";
 import { initConvo, promptConvo } from "./llmChat.js";
-
 import { Game } from "./Scenes/Game.js";
-// const { Context } = await init();
 
-// var cursors;
+const { Context } = await init();
+
 const SCALE = 2.0;
-var my = { sprite: {}, objects: [], tools: [] };
-
-console.log(my);
+var my = { sprite: {}, objects: [], tools: [], Context: Context };
 
 // game config
 let config = {
