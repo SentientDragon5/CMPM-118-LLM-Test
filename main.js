@@ -4,29 +4,29 @@ import { initConvo, promptConvo } from "./llmChat.js";
 // const { Context } = await init();
 
 // var cursors;
-// const SCALE = 2.0;
-// var my = { sprite: {}, Context: Context };
+const SCALE = 2.0;
+var my = { sprite: {}, objects: {} };
 
-// console.log(my);
+console.log(my);
 
-// // game config
-// let config = {
-//   parent: "phaser-game",
-//   type: Phaser.CANVAS,
-//   render: {
-//     pixelArt: true, // prevent pixel art from getting blurred when scaled
-//   },
-//   width: 1280,
-//   height: 800,
-//   scene: {
-//     create: create,
-//   },
-// };
-// function create() {
-//   this.scene.add("Load", new Load(my), true); // Start the scene and pass myData
-// }
+// game config
+let config = {
+  parent: "phaser-game",
+  type: Phaser.CANVAS,
+  render: {
+    pixelArt: true, // prevent pixel art from getting blurred when scaled
+  },
+  width: 1280,
+  height: 800,
+  scene: {
+    create: create,
+  },
+};
+function create() {
+  this.scene.add("Load", new Load(my), true); // Start the scene and pass myData
+}
 
-// const game = new Phaser.Game(config);
+const game = new Phaser.Game(config);
 
 const chatOutput = document.getElementById("chat-output");
 const messageInput = document.getElementById("message-input");

@@ -2,6 +2,7 @@ class Game extends Phaser.Scene {
   constructor(my) {
     super("game");
     this.my = my;
+    my.objects.push("Such and such");
     console.log(my);
   }
 
