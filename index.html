@@ -28,33 +28,8 @@
   <button id="send-button">Send</button>
 </div>
 
-<script>
-const chatOutput = document.getElementById('chat-output');
-const messageInput = document.getElementById('message-input');
-const sendButton = document.getElementById('send-button');
-
-messageInput.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter' && !event.shiftKey) {
-    event.preventDefault(); // Prevent default newline behavior
-    sendMessage();
-  }
-});
-
-sendButton.addEventListener('click', sendMessage);
-
-function sendMessage() {
-  const message = messageInput.value;
-  messageInput.value = '';
-  displayMessage(message, 'user');
-}
-
-function displayMessage(message, sender) {
-  const messageElement = document.createElement('div');
-  messageElement.classList.add(sender);
-  messageElement.textContent = message;
-  chatOutput.appendChild(messageElement);
-}
-</script>
+<script type="module" src="llmChat.js"></script> 
+<script type="module" src="main.js"></script> 
 
 </body>
 </html>

@@ -6,7 +6,6 @@
   "dependencies": {
     "@google/generative-ai": "latest",
     "@langchain/google-genai": "latest",
-    "dotenv": "^16.4.7",
     "langchain": "^0.3.6",
     "phaser": "^3.87.0",
     "prompt-sync": "^4.2.0",
@@ -20,6 +19,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "dotenv": "^16.4.7",
     "vite": "^5.4.10"
   }
 }

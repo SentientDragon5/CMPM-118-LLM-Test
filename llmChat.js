@@ -9,11 +9,13 @@ import {
   SystemMessage,
 } from "@langchain/core/messages";
 
-dotenv.config(); // Load environment variables from .env file
+console.log("WOrking up until now");
+//dotenv.config(); // Load environment variables from .env file
 
 const llm = new ChatGoogleGenerativeAI({
   modelName: "gemini-1.5-flash",
   temperature: 0.5,
+  apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
 });
 
 const addTool = tool(
@@ -56,6 +58,7 @@ const toolsByName = {
 };
 
 async function humanTurn(response) {
+  if (response == "") return ""; //we cant submit empty strings to gemini
   messages.push(new HumanMessage(response));
   return response;
 }
@@ -83,25 +86,19 @@ async function aiTurn(text) {
 }
 
 var log;
-async function chatWithAI(logFunc, userInput) {
+async function initConvo(logFunc) {
   log = logFunc;
   log("Script", 'Chat starting. to quit return "e"');
 
   const sysPrompt = "I am an AI and I only speak in Limericks";
   messages.push(new SystemMessage(sysPrompt));
   log("System", sysPrompt);
-
-  while (true) {
-    const humanPrompt = await humanTurn(userInput());
-    if (humanPrompt.toLowerCase() === "e") {
-      log("Script", "System Quitting");
-      break;
-    }
-    log("You", humanPrompt);
-
-    const result = await aiTurn(messages);
-    log("AI", result);
-  }
+}
+async function promptConvo(prompt) {
+  const humanPrompt = await humanTurn(prompt);
+  log("You", humanPrompt);
+  const result = await aiTurn(messages);
+  log("AI", result);
 }
 
-export { chatWithAI };
+export { initConvo, promptConvo };
