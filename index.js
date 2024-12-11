@@ -64,7 +64,7 @@ async function humanTurn() {
   return response;
 }
 async function aiTurn(text) {
-  const response = await llmWithTools.invoke(messages);
+  var response = await llmWithTools.invoke(messages);
   messages.push(response);
 
   for (const toolCall of response.tool_calls) {
@@ -76,9 +76,12 @@ async function aiTurn(text) {
       content: result.toString(),
     });
     messages.push(toolMessage);
+    console.log("Tool: " + toolMessage.content);
   }
 
-  return "AI:" + response.content;
+  response = await llmWithTools.invoke(messages);
+  messages.push(response);
+  return "AI: " + response.content;
 }
 
 async function chatWithAI() {
