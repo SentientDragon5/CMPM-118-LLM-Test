@@ -48,8 +48,8 @@ const multiplyTool = tool(
   }
 );
 
-const tools = [addTool, multiplyTool];
-const llmWithTools = llm.bindTools(tools);
+let tools = [addTool, multiplyTool]; // Initialize tools here
+let llmWithTools = llm.bindTools(tools); // Initial binding
 const messages = [];
 
 const toolsByName = {
@@ -86,8 +86,16 @@ async function aiTurn(text) {
 }
 
 var log;
-async function initConvo(logFunc) {
+async function initConvo(logFunc, moreTools) {
   log = logFunc;
+
+  // Rebind tools with more tools
+  tools = [...tools, ...moreTools];
+  llmWithTools = llm.bindTools(tools);
+  moreTools.forEach((tool) => {
+    toolsByName[tool.name] = tool;
+  });
+  console.log("TOOLS initiated: ", tools);
 
   const sysPrompt = "I am an AI and I only speak in Limericks";
   messages.push(new SystemMessage(sysPrompt));
