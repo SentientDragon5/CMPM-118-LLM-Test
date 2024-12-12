@@ -105,7 +105,9 @@ export class Game extends Phaser.Scene {
   displayTextAtTool = tool(
     async ({ text, x, y }) => {
       console.log("Displaying " + text + " at ", x, ",", y);
-      this.my.objects.push(this.add.text(x, y, text));
+      this.my.objects.push(
+        this.add.text(x * this.tileSize, y * this.tileSize, text)
+      );
 
       return text + " displayed at " + x + " , " + y;
     },
