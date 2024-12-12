@@ -86,7 +86,7 @@ async function aiTurn(text) {
 }
 
 var log;
-async function initConvo(logFunc, moreTools) {
+async function initConvo(sysPrompt, logFunc, moreTools) {
   log = logFunc;
 
   // Rebind tools with more tools
@@ -97,7 +97,6 @@ async function initConvo(logFunc, moreTools) {
   });
   console.log("TOOLS initiated: ", tools);
 
-  const sysPrompt = "I am an AI and I only speak in Limericks";
   messages.push(new SystemMessage(sysPrompt));
   log("System", sysPrompt);
 }

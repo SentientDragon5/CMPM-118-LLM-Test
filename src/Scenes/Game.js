@@ -11,7 +11,12 @@ export class Game extends Phaser.Scene {
     // Add tools here
 
     my.tools.push(
-      ...[this.displayAtTool, this.displayWithinTool, this.displayTextAtTool, this.createMapTool]
+      ...[
+        this.displayAtTool,
+        this.displayWithinTool,
+        this.displayTextAtTool,
+        this.createMapTool,
+      ]
     );
     this.tileSize = 16;
   }
@@ -40,7 +45,9 @@ export class Game extends Phaser.Scene {
   displayAtTool = tool(
     async ({ sprite, x, y }) => {
       console.log("Displaying " + sprite + " at ", x, ",", y);
-      this.my.objects.push(this.add.sprite(x*this.tileSize, y*this.tileSize, sprite));
+      this.my.objects.push(
+        this.add.sprite(x * this.tileSize, y * this.tileSize, sprite)
+      );
 
       return sprite + " displayed at " + x + " , " + y; // returns for the log and for the ai to know
     },
@@ -63,19 +70,19 @@ export class Game extends Phaser.Scene {
       return text + " displayed at " + x + " , " + y;
     },
     {
-      name: "displayAt",
+      name: "displayTextAt",
       schema: z.object({
         text: z.string(),
         x: z.number(),
         y: z.number(),
       }),
-      description: "Displays a sprite at coordinates x and y",
+      description: "Displays text at coordinates x and y",
     }
   );
 
   displayWithinTool = tool(
     async ({ sprite, xMin, xMax, yMin, yMax }) => {
-      let answerSet = []
+      let answerSet = [];
       answerSet = await this.checkPlace(xMin, xMax, yMin, yMax);
       if (answerSet.length == 0) {
         console.log("No valid positions found");
@@ -84,12 +91,23 @@ export class Game extends Phaser.Scene {
       let randomSetIndex = Math.floor(Math.random() * answerSet.length);
       console.log(randomSetIndex);
       let randomCoord = answerSet[randomSetIndex];
-      let x = randomCoord.x*this.tileSize;
-      let y = randomCoord.y*this.tileSize;
+      let x = randomCoord.x * this.tileSize;
+      let y = randomCoord.y * this.tileSize;
       console.log(answerSet);
-      console.log("Displaying " + sprite + " at ", x/this.tileSize, ",", y/this.tileSize);
+      console.log(
+        "Displaying " + sprite + " at ",
+        x / this.tileSize,
+        ",",
+        y / this.tileSize
+      );
       this.my.objects.push(this.add.sprite(x, y, sprite));
-      return sprite + " displayed at " + x/this.tileSize + " , " + y/this.tileSize; // returns for the log and for the ai to know
+      return (
+        sprite +
+        " displayed at " +
+        x / this.tileSize +
+        " , " +
+        y / this.tileSize
+      ); // returns for the log and for the ai to know
     },
     {
       name: "displayWithin",
@@ -110,23 +128,23 @@ export class Game extends Phaser.Scene {
     const yvar = Int.const("y");
     solver.add(And(xvar.ge(xmin), xvar.le(xmax), yvar.ge(ymin), yvar.le(ymax)));
     const results = new Set();
-    while (await solver.check() === "sat") {
+    while ((await solver.check()) === "sat") {
       const model = solver.model();
       const xVal = parseInt(model.eval(xvar).asString());
       const yVal = parseInt(model.eval(yvar).asString());
-  
+
       const coordStr = `${xVal},${yVal}`;
       results.add(coordStr);
 
       solver.add(Not(And(xvar.eq(xVal), yvar.eq(yVal))));
     }
 
-    return Array.from(results).map(coord => {
+    return Array.from(results).map((coord) => {
       const [x, y] = coord.split(",").map(Number);
       return { x, y };
     });
   }
-  
+
   createMapTool = tool(
     async ({ sprite, x, y }) => {
       console.log("Creating map of " + sprite + " with size " + x + "x" + y);
