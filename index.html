@@ -2,6 +2,22 @@
 <html>
 <head>
 <style>
+    h1 {
+      text-align: center;
+      font-size: 2.5em;
+      margin-bottom: 5px; 
+      background: linear-gradient(to right, #f39c12, #e74c3c, #9b59b6, #3498db, #2ecc71);
+      -webkit-background-clip: text;
+      color: transparent; 
+    }
+    #title {
+      text-align: center; /* Center the contents of the title div */
+      position: absolute; 
+      top: 20px;         
+      left: 50%;        
+      transform: translateX(-50%); 
+      width: 100%; /* Ensure the title spans the full width */
+    }
 body {
   display: flex;
   justify-content: center; /* Center the chat container */
@@ -75,6 +91,18 @@ body {
 .other {
   text-align: left; 
 }
+    /* Styles for the author and GitHub link */
+    .author {
+      text-align: center;
+      font-size: 1em;
+      margin-top: 5px; /* Add some space above */
+      color: #727272;
+    }
+
+    .github-link {
+      text-align: center;
+      margin-top: 5px; /* Add some space above */
+    }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -85,6 +113,16 @@ body {
 
 </head>
 <body>
+    <div id="title">
+    <h1>AI World Generator</h1> 
+    <div class="author">Built by:</div>
+    <div class="author">Logan (Langchain integration, Phaser integration, Z3 integration)</div>
+    <!-- add yourselves as you add somthing to the project -->
+    <div class="github-link">
+        <a href="https://github.com/SentientDragon5/CMPM-118-LLM-Test" target="_blank">GitHub</a> 
+    </div>
+    </div>
+      
     <div id="app"></div>  </div> 
 
 <div id="chat-container">
