@@ -9,7 +9,9 @@ export class Game extends Phaser.Scene {
     console.log(my);
 
     // Add tools here
-    my.tools.push(...[this.displayAtTool, this.displayWithinTool]);
+    my.tools.push(
+      ...[this.displayAtTool, this.displayWithinTool, this.displayTextAtTool]
+    );
   }
 
   preload() {
@@ -37,6 +39,24 @@ export class Game extends Phaser.Scene {
       name: "displayAt",
       schema: z.object({
         sprite: z.string(),
+        x: z.number(),
+        y: z.number(),
+      }),
+      description: "Displays a sprite at coordinates x and y",
+    }
+  );
+
+  displayTextAtTool = tool(
+    async ({ text, x, y }) => {
+      console.log("Displaying " + text + " at ", x, ",", y);
+      this.my.objects.push(this.add.text(x, y, text));
+
+      return text + " displayed at " + x + " , " + y;
+    },
+    {
+      name: "displayAt",
+      schema: z.object({
+        text: z.string(),
         x: z.number(),
         y: z.number(),
       }),
