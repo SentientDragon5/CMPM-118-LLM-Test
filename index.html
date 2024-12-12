@@ -78,12 +78,17 @@ body {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s; /* Add a transition effect */
+  height: 100%;
 }
 
 #send-button:hover {
   background-color: #7a5dfb; /* Lighter purple on hover */
 }
-
+#chat-input {
+  display: flex; /* Use flexbox for easy alignment */
+  align-items: center; /* Vertically center the items */
+  width: 100%; 
+}
 .user {
   text-align: right; 
 }
@@ -120,10 +125,16 @@ body {
     }
 
     #hints-content {
-      max-height: 150px; /* Set a maximum height for the scrollable area */
+      max-height: 200px; /* Set a maximum height for the scrollable area */
       overflow-y: auto;
       margin-top: 10px;
       display: none; /* Initially hide the content */
+      color: #727272;
+    }
+    #chat-hint-column {
+      display: flex;
+      flex-direction: column; /* Stack children vertically */
+      padding: 10px auto;
     }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -137,12 +148,16 @@ body {
 <body>
     <div id="title">
     <h1>AI World Generator</h1> 
+<!-- moved to hints menu
     <div class="author">Built by:</div>
     <div class="author">Logan (Langchain integration, Phaser integration, Z3 integration)</div>
     <div class="author">William (map generator, Z3 constraints)</div>
-    <!-- add yourselves as you add somthing to the project -->
-    <div class="github-link">
+     add yourselves as you add somthing to the project -->
+     <div>
+      <p style="display: inline; color: #727272">get the source at</p>
+    <div class="github-link" style="display: inline;">
         <a href="https://github.com/SentientDragon5/CMPM-118-LLM-Test" target="_blank">GitHub</a> 
+    </div>
     </div>
     </div>
       
@@ -151,8 +166,9 @@ body {
     <div id ="chat-hint-column">
 <div id="chat-container">
   <div id="chat-output"></div>
+  <div id="chat-input">
   <textarea id="message-input"></textarea>
-  <button id="send-button">Send</button>
+  <button id="send-button">Send</button></div>
 </div>
 
 
@@ -160,6 +176,10 @@ body {
   <div id="hints-header">Hints</div>
   <div id="hints-content">
     <p>Welcome to the AI world Generator.</p>
+
+    <p>Built by:</p>
+    <p>Logan (Langchain integration, Phaser integration, Z3 integration)</p>
+    <p>William (map generator, Z3 constraints)</p>
     <p>To get started, you can chat with the AI in natural language. To interface with the game world, you can give simple commands like</p>
     <ul>
       <li>Add a tree in the center</li>
