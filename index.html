@@ -85,6 +85,22 @@ body {
 #send-button:hover {
   background-color: #7a5dfb; /* Lighter purple on hover */
 }
+#share-button {
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #5942c1; /* Purple button */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Add a transition effect */
+  height: 100%;
+  align-self: center;
+}
+
+#share-button:hover {
+  background-color: #7a5dfb; /* Lighter purple on hover */
+}
 #chat-input {
   display: flex; /* Use flexbox for easy alignment */
   align-items: center; /* Vertically center the items */
@@ -165,6 +181,7 @@ body {
     <div id="app"></div>  </div> 
 
     <div id ="chat-hint-column">
+      <button id="share-button">Share</button></div>
 <div id="chat-container">
   <div id="chat-output"></div>
   <div id="chat-input" style="padding: 10px;">

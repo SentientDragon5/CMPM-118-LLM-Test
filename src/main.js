@@ -6,7 +6,13 @@ import { Game } from "./Scenes/Game.js";
 const { Context } = await init();
 
 const SCALE = 2.0;
-var my = { sprite: {}, objects: [], tools: [], Context: Context };
+var my = {
+  sprite: {},
+  objects: [],
+  tools: [],
+  Context: Context,
+  screenshot: takeScreenshot,
+};
 
 // game config
 let config = {
@@ -46,6 +52,31 @@ messageInput.addEventListener("keydown", (event) => {
     sendMessage();
   }
 });
+
+const shareButton = document.getElementById("share-button");
+if (shareButton) {
+  shareButton.addEventListener("click", function () {
+    my.screenshot();
+  });
+}
+
+function takeScreenshot() {
+  // Delay the screenshot to ensure rendering is complete
+  console.log(game);
+  // Get the entire game canvas
+  const gameCanvas = game.canvas;
+
+  // Create a link element
+  const link = document.createElement("a");
+  link.download = "savedMap.png";
+
+  // Convert canvas to data URL
+  link.href = gameCanvas.toDataURL("image/png");
+
+  // Simulate a click to trigger the download
+  link.click();
+}
+
 function displayMessage(sender, message) {
   const sanitizedSender = sender.replace(/ /g, "-");
   const messageElement = document.createElement("div");
