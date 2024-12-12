@@ -46,9 +46,18 @@ export class Game extends Phaser.Scene {
 
   displayWithinTool = tool(
     async ({ sprite, xMin, xMax, yMin, yMax }) => {
-      let coords = await this.checkPlace(xMin, xMax, yMin, yMax);
-      let x = coords.x;
-      let y = coords.y;
+      let answerSet = []
+      answerSet = await this.checkPlace(xMin, xMax, yMin, yMax);
+      if (answerSet.length == 0) {
+        console.log("No valid positions found");
+        return "No valid positions available";
+      }
+      let randomSetIndex = Math.floor(Math.random() * answerSet.length);
+      console.log(randomSetIndex);
+      let randomCoord = answerSet[randomSetIndex];
+      let x = randomCoord.x;
+      let y = randomCoord.y;
+      console.log(answerSet);
       console.log("Displaying " + sprite + " at ", x, ",", y);
       this.my.objects.push(this.add.sprite(x, y, "blue"));
       return sprite + " displayed at " + x + " , " + y; // returns for the log and for the ai to know
@@ -68,18 +77,25 @@ export class Game extends Phaser.Scene {
   async checkPlace(xmin, xmax, ymin, ymax) {
     const { Solver, Int, And, Or, Distinct, Not } = new this.my.Context("main");
     const solver = new Solver();
-
     const xvar = Int.const("x");
     const yvar = Int.const("y");
-
     solver.add(And(xvar.ge(xmin), xvar.le(xmax), yvar.ge(ymin), yvar.le(ymax)));
+    const results = new Set();
+    while (await solver.check() === "sat") {
+      const model = solver.model();
+      const xVal = parseInt(model.eval(xvar).asString());
+      const yVal = parseInt(model.eval(yvar).asString());
+  
+      const coordStr = `${xVal},${yVal}`;
+      results.add(coordStr);
 
-    console.log(await solver.check());
-    const model = solver.model();
-    const xVal = parseInt(model.eval(xvar).asString());
-    const yVal = parseInt(model.eval(yvar).asString());
-    const coord = { x: xVal, y: yVal };
-    console.log(coord);
-    return coord;
+      solver.add(Not(And(xvar.eq(xVal), yvar.eq(yVal))));
+    }
+
+    return Array.from(results).map(coord => {
+      const [x, y] = coord.split(",").map(Number);
+      return { x, y };
+    });
   }
+
 }
