@@ -24,7 +24,10 @@ let config = {
 function create() {
   this.scene.add("Game", new Game(my), true); // Start the scene and pass myData
 
-  initConvo(log, my.tools);
+  const sysPrompt =
+    "I am a turn based game creation software. I can edit a 800 by 400 pixel map where 0,0 is the top left hand corner and 800,400 is the bottom right hand corner. in my responses I only speak in Limericks";
+
+  initConvo(sysPrompt, log, my.tools);
 }
 
 const game = new Phaser.Game(config);
