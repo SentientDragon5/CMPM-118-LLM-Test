@@ -17,6 +17,13 @@ export class Game extends Phaser.Scene {
     this.load.setPath("./assets/");
 
     this.load.image("blue", "blue_townie.png");
+    this.load.image("dirt", "dirt.png");
+    this.load.image("grass", "grass.png");
+    this.load.image("flower grass", "flower_grass.png");
+    this.load.image("bush", "bush.png");
+    this.load.image("tree", "tree.png");
+    this.load.image("mushroom", "mushroom.png");
+    this.load.image("wheelbarrow", "wheelbarrow.png");
   }
 
   create() {
@@ -103,13 +110,13 @@ export class Game extends Phaser.Scene {
     async ({ sprite, x, y }) => {
       console.log("Creating map of " + sprite + " with size " + x + "x" + y);
       this.grid = [];
-      for (let y1 = 0; y1 < y; y1++) {
-        this.grid[y1] = [];
-        for (let x1 = 0; x1 < x; x1++) {
-          const posX = this.tileSize / 2 + x1 * this.tileSize;
-          const posY = this.tileSize / 2 + y1 * this.tileSize;
+      for (let gridY = 0; gridY < y; gridY++) {
+        this.grid[gridY] = [];
+        for (let gridX = 0; gridX < x; gridX++) {
+          const posX = this.tileSize / 2 + gridX * this.tileSize;
+          const posY = this.tileSize / 2 + gridY * this.tileSize;
           const tileSprite = this.add.sprite(posX, posY, sprite);
-          this.grid[y1][x1] = { sprite: tileSprite };
+          this.grid[gridY][gridX] = { sprite: tileSprite };
         }
       }
       this.my.objects.push(this.grid);
