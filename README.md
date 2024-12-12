@@ -1,5 +1,8 @@
 **LLM test**
 
+Build does not work
+[Open Page](https://sentientdragon5.github.io/CMPM-118-LLM-Test/)
+
 install npm
 
 run `npm install` in this directory

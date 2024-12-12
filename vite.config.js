@@ -1,7 +1,6 @@
 import { defineConfig, loadEnv } from "vite";
 
 export default ({ mode }) => {
-  // Load app-level env vars to node-level env vars.
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
 
   return defineConfig({
@@ -17,6 +16,23 @@ export default ({ mode }) => {
         },
       },
     ],
-    // To access env vars here use process.env.TEST_VAR
+
+    // WASM and z3-solver Configuration
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            "z3-solver": ["z3-solver"],
+          },
+        },
+      },
+    },
+    optimizeDeps: {
+      include: ["z3-solver"],
+    },
+    build: {
+      target: "esnext", // Or a higher target that supports top-level await
+      // ... other build options ...
+    },
   });
 };
