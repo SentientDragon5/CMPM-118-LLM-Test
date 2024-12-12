@@ -9,7 +9,8 @@ export class Game extends Phaser.Scene {
     console.log(my);
 
     // Add tools here
-    my.tools.push(...[this.displayAtTool, this.displayWithinTool]);
+    my.tools.push(...[this.displayAtTool, this.displayWithinTool, this.createMapTool]);
+    this.tileSize = 16;
   }
 
   preload() {
@@ -29,7 +30,7 @@ export class Game extends Phaser.Scene {
   displayAtTool = tool(
     async ({ sprite, x, y }) => {
       console.log("Displaying " + sprite + " at ", x, ",", y);
-      this.my.objects.push(this.add.sprite(x, y, "blue"));
+      this.my.objects.push(this.add.sprite(x*this.tileSize, y*this.tileSize, "blue"));
 
       return sprite + " displayed at " + x + " , " + y; // returns for the log and for the ai to know
     },
@@ -55,12 +56,12 @@ export class Game extends Phaser.Scene {
       let randomSetIndex = Math.floor(Math.random() * answerSet.length);
       console.log(randomSetIndex);
       let randomCoord = answerSet[randomSetIndex];
-      let x = randomCoord.x;
-      let y = randomCoord.y;
+      let x = randomCoord.x*this.tileSize;
+      let y = randomCoord.y*this.tileSize;
       console.log(answerSet);
-      console.log("Displaying " + sprite + " at ", x, ",", y);
+      console.log("Displaying " + sprite + " at ", x/this.tileSize, ",", y/this.tileSize);
       this.my.objects.push(this.add.sprite(x, y, "blue"));
-      return sprite + " displayed at " + x + " , " + y; // returns for the log and for the ai to know
+      return sprite + " displayed at " + x/this.tileSize + " , " + y/this.tileSize; // returns for the log and for the ai to know
     },
     {
       name: "displayWithin",
@@ -97,5 +98,31 @@ export class Game extends Phaser.Scene {
       return { x, y };
     });
   }
-
+  
+  createMapTool = tool(
+    async ({ sprite, x, y }) => {
+      console.log("Creating map of " + sprite + " with size " + x + "x" + y);
+      this.grid = [];
+      for (let y1 = 0; y1 < y; y1++) {
+        this.grid[y1] = [];
+        for (let x1 = 0; x1 < x; x1++) {
+          const posX = this.tileSize / 2 + x1 * this.tileSize;
+          const posY = this.tileSize / 2 + y1 * this.tileSize;
+          const tileSprite = this.add.sprite(posX, posY, sprite);
+          this.grid[y1][x1] = { sprite: tileSprite };
+        }
+      }
+      this.my.objects.push(this.grid);
+      return sprite + " map created with size " + x + "x" + y; // returns for the log and for the AI to know
+    },
+    {
+      name: "createMap",
+      schema: z.object({
+        sprite: z.string(),
+        x: z.number(),
+        y: z.number(),
+      }),
+      description: "Create a map of size x and y",
+    }
+  );
 }
