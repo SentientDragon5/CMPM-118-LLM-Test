@@ -20,6 +20,21 @@ export class Game extends Phaser.Scene {
     this.tileSize = 16;
   }
 
+  init() {
+    console.log(this);
+    let objects = [];
+    this.my.state.objects.forEach((obj) => {
+      // this.add.existing(obj);
+      // console.log("added ", obj);
+
+      const a = this.add.sprite(obj.x, obj.y, obj.name);
+      a.name = obj.name;
+      objects.push(a);
+    });
+    this.my.state.objects = objects;
+    console.log("postload: ", this.scene);
+  }
+
   preload() {
     this.load.setPath("./assets/");
 
@@ -44,7 +59,7 @@ export class Game extends Phaser.Scene {
   removeTool = tool(
     async ({ obj, x, y }) => {
       console.log("removing " + obj + " at ", x, ",", y);
-      const toRemove = this.my.objects.filter(
+      const toRemove = this.my.state.objects.filter(
         (o) =>
           o.name == obj &&
           Math.sqrt(
@@ -52,18 +67,6 @@ export class Game extends Phaser.Scene {
               (o.y / this.tileSize - y) * (o.y / this.tileSize - y)
           ) < 5
       );
-      this.my.objects.forEach((o) => {
-        console.log(
-          o.name,
-          obj,
-          o.x / this.tileSize - x,
-          o.y / this.tileSize - y,
-          Math.sqrt(
-            (o.x / this.tileSize - x) * (o.x / this.tileSize - x) +
-              (o.y / this.tileSize - y) * (o.y / this.tileSize - y)
-          )
-        );
-      });
       toRemove.forEach((o) => {
         o.destroy();
       });
@@ -86,8 +89,7 @@ export class Game extends Phaser.Scene {
       console.log("Displaying " + sprite + " at ", x, ",", y);
       const obj = this.add.sprite(x * this.tileSize, y * this.tileSize, sprite);
       obj.name = sprite;
-      this.my.objects.push(obj);
-      console.log(this.my.objects);
+      this.my.state.objects.push(obj);
 
       return sprite + " displayed at " + x + " , " + y; // returns for the log and for the ai to know
     },
@@ -105,7 +107,7 @@ export class Game extends Phaser.Scene {
   displayTextAtTool = tool(
     async ({ text, x, y }) => {
       console.log("Displaying " + text + " at ", x, ",", y);
-      this.my.objects.push(
+      this.my.state.objects.push(
         this.add.text(x * this.tileSize, y * this.tileSize, text)
       );
 
@@ -142,7 +144,7 @@ export class Game extends Phaser.Scene {
         ",",
         y / this.tileSize
       );
-      this.my.objects.push(this.add.sprite(x, y, sprite));
+      this.my.state.objects.push(this.add.sprite(x, y, sprite));
       return (
         sprite +
         " displayed (within) at " +
@@ -200,7 +202,7 @@ export class Game extends Phaser.Scene {
           this.grid[gridY][gridX] = { sprite: tileSprite };
         }
       }
-      this.my.objects.push(this.grid);
+      this.my.state.objects.push(this.grid);
       return sprite + " map created with size " + x + "x" + y; // returns for the log and for the AI to know
     },
     {

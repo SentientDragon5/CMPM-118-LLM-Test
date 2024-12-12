@@ -101,6 +101,30 @@ body {
 #share-button:hover {
   background-color: #7a5dfb; /* Lighter purple on hover */
 }
+
+#button-container {
+      display: flex; /* Use flexbox for horizontal arrangement */
+      justify-content: center; /* Center the buttons */
+      gap: 10px; /* Add some space between buttons */
+      margin-top: 10px; 
+    }
+
+    .action-button { /* Style for all action buttons */
+      padding: 10px;
+      background-color: #5942c1; 
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s; 
+      height: fit-content; /* Adjust height to fit text */
+      align-self: center;
+    }
+
+    .action-button:hover {
+      background-color: #7a5dfb; 
+    }
+
 #chat-input {
   display: flex; /* Use flexbox for easy alignment */
   align-items: center; /* Vertically center the items */
@@ -181,7 +205,11 @@ body {
     <div id="app"></div>  </div> 
 
     <div id ="chat-hint-column">
-      <button id="share-button">Share</button></div>
+      <div id="button-container">
+        <button id="export-image-button" class="action-button">Export Image</button>
+        <button id="export-json-button" class="action-button">Export JSON</button>
+        <button id="load-json-button" class="action-button">Load JSON</button>
+      </div>
 <div id="chat-container">
   <div id="chat-output"></div>
   <div id="chat-input" style="padding: 10px;">

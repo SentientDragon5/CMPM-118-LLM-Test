@@ -50,7 +50,7 @@ const multiplyTool = tool(
 
 let tools = [addTool, multiplyTool]; // Initialize tools here
 let llmWithTools = llm.bindTools(tools); // Initial binding
-const messages = [];
+let messages = [];
 
 const toolsByName = {
   add: addTool,
@@ -100,6 +100,26 @@ async function initConvo(sysPrompt, logFunc, moreTools) {
   messages.push(new SystemMessage(sysPrompt));
   log("System", sysPrompt);
 }
+async function loadConvo(history) {
+  while (messages.length > 0) {
+    messages.pop();
+  }
+  history.forEach((message) => {
+    if (message.user == "You") {
+      messages.push(new HumanMessage(message.text));
+    }
+    if (message.user == "AI") {
+      messages.push(new AIMessage(message.text));
+    }
+    if (message.user == "System") {
+      messages.push(new SystemMessage(message.text));
+    }
+    if (message.user == "Tool") {
+      messages.push(new ToolMessage(message.text));
+    }
+    log(message.user, messages[messages.length - 1].content);
+  });
+}
 async function promptConvo(prompt) {
   const humanPrompt = await humanTurn(prompt);
   log("You", humanPrompt);
@@ -107,4 +127,4 @@ async function promptConvo(prompt) {
   log("AI", result);
 }
 
-export { initConvo, promptConvo };
+export { initConvo, promptConvo, loadConvo };
