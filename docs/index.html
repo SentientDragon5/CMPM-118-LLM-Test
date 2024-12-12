@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    h1 {
+      text-align: center;
+      font-size: 2.5em;
+      margin-bottom: 5px; 
+      background: linear-gradient(to right, #f39c12, #e74c3c, #9b59b6, #3498db, #2ecc71);
+      -webkit-background-clip: text;
+      color: transparent; 
+    }
+    #title {
+      text-align: center; /* Center the contents of the title div */
+      position: absolute; 
+      top: 20px;         
+      left: 50%;        
+      transform: translateX(-50%); 
+      width: 100%; /* Ensure the title spans the full width */
+    }
+body {
+  display: flex;
+  justify-content: center; /* Center the chat container */
+  align-items: center;     /* Center vertically */
+  min-height: 100vh;      /* Ensure body takes up full viewport height */
+  background-color: #121212; /* Dark background */
+  font-family: sans-serif;
+  color: #eee;          /* Light text color */
+}
+
+#app {
+    padding: 20px;
+}
+
+#chat-container {
+  background-color: #242424;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  width: 80%;
+  max-width: 600px;
+}
+
+#chat-output {
+  height: 300px;
+  overflow-y: scroll;
+  border: none; /* Remove the border */
+  padding: 10px;
+  background-color: #333; /* Slightly lighter background for chat output */
+  border-radius: 5px;
+}
+
+.user {
+  text-align: right;
+}
+
+.other {
+  text-align: left;
+}
+
+#message-input {
+  width: calc(100% - 80px); /* Adjust width to accommodate button */
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #555;
+  border-radius: 5px;
+  background-color: #333;
+  color: #eee;
+  resize: vertical;
+}
+
+#send-button {
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #5942c1; /* Purple button */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Add a transition effect */
+}
+
+#send-button:hover {
+  background-color: #7a5dfb; /* Lighter purple on hover */
+}
+
+.user {
+  text-align: right; 
+}
+
+.other {
+  text-align: left; 
+}
+    /* Styles for the author and GitHub link */
+    .author {
+      text-align: center;
+      font-size: 1em;
+      margin-top: 5px; /* Add some space above */
+      color: #727272;
+    }
+
+    .github-link {
+      text-align: center;
+      margin-top: 5px; /* Add some space above */
+    }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script src="/z3-built.js"></script>
+<script>
+  globalThis.global = { initZ3: globalThis.initZ3 };
+</script>
+
+  <script type="module" crossorigin src="/assets/index-D5mD_G4Q.js"></script>
+</head>
+<body>
+    <div id="title">
+    <h1>AI World Generator</h1> 
+    <div class="author">Built by:</div>
+    <div class="author">Logan (Langchain integration, Phaser integration, Z3 integration)</div>
+    <!-- add yourselves as you add somthing to the project -->
+    <div class="github-link">
+        <a href="https://github.com/SentientDragon5/CMPM-118-LLM-Test" target="_blank">GitHub</a> 
+    </div>
+    </div>
+      
+    <div id="app"></div>  </div> 
+
+<div id="chat-container">
+  <div id="chat-output"></div>
+  <textarea id="message-input"></textarea>
+  <button id="send-button">Send</button>
+</div>
+  
+
+</body>
+</html>
