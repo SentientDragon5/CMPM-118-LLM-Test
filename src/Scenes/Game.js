@@ -5,8 +5,6 @@ export class Game extends Phaser.Scene {
   constructor(my) {
     super("game");
     this.my = my;
-    my.objects.push("Such and such");
-    console.log(my);
 
     // Add tools here
 
@@ -16,6 +14,7 @@ export class Game extends Phaser.Scene {
         this.displayWithinTool,
         this.displayTextAtTool,
         this.createMapTool,
+        this.removeTool,
       ]
     );
     this.tileSize = 16;
@@ -42,12 +41,53 @@ export class Game extends Phaser.Scene {
     console.log("Update Called");
   }
 
+  removeTool = tool(
+    async ({ obj, x, y }) => {
+      console.log("removing " + obj + " at ", x, ",", y);
+      const toRemove = this.my.objects.filter(
+        (o) =>
+          o.name == obj &&
+          Math.sqrt(
+            (o.x / this.tileSize - x) * (o.x / this.tileSize - x) +
+              (o.y / this.tileSize - y) * (o.y / this.tileSize - y)
+          ) < 5
+      );
+      this.my.objects.forEach((o) => {
+        console.log(
+          o.name,
+          obj,
+          o.x / this.tileSize - x,
+          o.y / this.tileSize - y,
+          Math.sqrt(
+            (o.x / this.tileSize - x) * (o.x / this.tileSize - x) +
+              (o.y / this.tileSize - y) * (o.y / this.tileSize - y)
+          )
+        );
+      });
+      toRemove.forEach((o) => {
+        o.destroy();
+      });
+
+      return obj + " removed at " + x + " , " + y; // returns for the log and for the ai to know
+    },
+    {
+      name: "remove",
+      schema: z.object({
+        obj: z.string(),
+        x: z.number(),
+        y: z.number(),
+      }),
+      description: "removes an object near coordinates x and y",
+    }
+  );
+
   displayAtTool = tool(
     async ({ sprite, x, y }) => {
       console.log("Displaying " + sprite + " at ", x, ",", y);
-      this.my.objects.push(
-        this.add.sprite(x * this.tileSize, y * this.tileSize, sprite)
-      );
+      const obj = this.add.sprite(x * this.tileSize, y * this.tileSize, sprite);
+      obj.name = sprite;
+      this.my.objects.push(obj);
+      console.log(this.my.objects);
 
       return sprite + " displayed at " + x + " , " + y; // returns for the log and for the ai to know
     },
@@ -103,7 +143,7 @@ export class Game extends Phaser.Scene {
       this.my.objects.push(this.add.sprite(x, y, sprite));
       return (
         sprite +
-        " displayed at " +
+        " displayed (within) at " +
         x / this.tileSize +
         " , " +
         y / this.tileSize
