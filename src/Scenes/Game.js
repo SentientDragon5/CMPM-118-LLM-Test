@@ -46,7 +46,7 @@ export class Game extends Phaser.Scene {
     async ({ sprite, x, y }) => {
       console.log("Displaying " + sprite + " at ", x, ",", y);
       this.my.objects.push(
-        this.add.sprite(x * this.tileSize, y * this.tileSize, "blue")
+        this.add.sprite(x * this.tileSize, y * this.tileSize, sprite)
       );
 
       return sprite + " displayed at " + x + " , " + y; // returns for the log and for the ai to know
@@ -100,7 +100,7 @@ export class Game extends Phaser.Scene {
         ",",
         y / this.tileSize
       );
-      this.my.objects.push(this.add.sprite(x, y, "blue"));
+      this.my.objects.push(this.add.sprite(x, y, sprite));
       return (
         sprite +
         " displayed at " +
