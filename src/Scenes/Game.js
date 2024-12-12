@@ -11,7 +11,7 @@ export class Game extends Phaser.Scene {
     // Add tools here
 
     my.tools.push(
-      ...[this.displayAtTool, this.displayWithinTool, this.createMapTool]
+      ...[this.displayAtTool, this.displayWithinTool, this.displayTextAtTool, this.createMapTool]
     );
     this.tileSize = 16;
   }
