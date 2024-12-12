@@ -103,6 +103,28 @@ body {
       text-align: center;
       margin-top: 5px; /* Add some space above */
     }
+    #hints-container {
+      background-color: #242424;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      padding: 10px;
+      width: 80%;
+      max-width: 600px;
+      margin-top: 10px; /* Add some space above the hints */
+    }
+
+    #hints-header {
+      cursor: pointer;
+      user-select: none; /* Prevent text selection */
+      color: #727272;
+    }
+
+    #hints-content {
+      max-height: 150px; /* Set a maximum height for the scrollable area */
+      overflow-y: auto;
+      margin-top: 10px;
+      display: none; /* Initially hide the content */
+    }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -117,6 +139,7 @@ body {
     <h1>AI World Generator</h1> 
     <div class="author">Built by:</div>
     <div class="author">Logan (Langchain integration, Phaser integration, Z3 integration)</div>
+    <div class="author">William (map generator, Z3 constraints)</div>
     <!-- add yourselves as you add somthing to the project -->
     <div class="github-link">
         <a href="https://github.com/SentientDragon5/CMPM-118-LLM-Test" target="_blank">GitHub</a> 
@@ -125,14 +148,50 @@ body {
       
     <div id="app"></div>  </div> 
 
+    <div id ="chat-hint-column">
 <div id="chat-container">
   <div id="chat-output"></div>
   <textarea id="message-input"></textarea>
   <button id="send-button">Send</button>
 </div>
 
+
+<div id="hints-container">
+  <div id="hints-header">Hints</div>
+  <div id="hints-content">
+    <p>Welcome to the AI world Generator.</p>
+    <p>To get started, you can chat with the AI in natural language. To interface with the game world, you can give simple commands like</p>
+    <ul>
+      <li>Add a tree in the center</li>
+    </ul>
+    <p>which should do as the text suggests. you can try chaining some of these commands together even.</p>
+    <p>Try adding these elements:</p>
+    <ul>
+      <li>Tree</li>
+      <li>Wheelbarrow</li>
+      <li>Dirt</li>
+      <li>Mushroom</li>
+    </ul>
+    <p>You can also ask it to make a map out of grass or place a mushroom within a certain coordinate area or between two other objects.</p>
+    <p></p>
+  </div>
+</div>
+</div>
 <script type="module" src="src/llmChat.js"></script> 
 <script type="module" src="src/main.js"></script> 
 
+<script>
+  // JavaScript to toggle the hints content
+  const hintsHeader = document.getElementById('hints-header');
+  const hintsContent = document.getElementById('hints-content');
+
+  hintsHeader.addEventListener('click', () => {
+    if (hintsContent.style.display === 'none' || hintsContent.style.display === '') {
+      hintsContent.style.display = 'block';
+    } else {
+      hintsContent.style.display = 'none';
+    }
+  });
+</script>
 </body>
 </html>
