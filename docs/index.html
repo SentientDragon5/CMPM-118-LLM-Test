@@ -78,12 +78,58 @@ body {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s; /* Add a transition effect */
+  height: 100%;
+  align-self: center;
 }
 
 #send-button:hover {
   background-color: #7a5dfb; /* Lighter purple on hover */
 }
+#share-button {
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #5942c1; /* Purple button */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Add a transition effect */
+  height: 100%;
+  align-self: center;
+}
 
+#share-button:hover {
+  background-color: #7a5dfb; /* Lighter purple on hover */
+}
+
+#button-container {
+      display: flex; /* Use flexbox for horizontal arrangement */
+      justify-content: center; /* Center the buttons */
+      gap: 10px; /* Add some space between buttons */
+      margin-top: 10px; 
+    }
+
+    .action-button { /* Style for all action buttons */
+      padding: 10px;
+      background-color: #5942c1; 
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s; 
+      height: fit-content; /* Adjust height to fit text */
+      align-self: center;
+    }
+
+    .action-button:hover {
+      background-color: #7a5dfb; 
+    }
+
+#chat-input {
+  display: flex; /* Use flexbox for easy alignment */
+  align-items: center; /* Vertically center the items */
+  width: 100%; 
+}
 .user {
   text-align: right; 
 }
@@ -103,6 +149,34 @@ body {
       text-align: center;
       margin-top: 5px; /* Add some space above */
     }
+    #hints-container {
+      background-color: #242424;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      padding: 10px;
+      width: 80%;
+      max-width: 600px;
+      margin-top: 10px; /* Add some space above the hints */
+    }
+
+    #hints-header {
+      cursor: pointer;
+      user-select: none; /* Prevent text selection */
+      color: #727272;
+    }
+
+    #hints-content {
+      max-height: 200px; /* Set a maximum height for the scrollable area */
+      overflow-y: auto;
+      margin-top: 10px;
+      display: none; /* Initially hide the content */
+      color: #727272;
+    }
+    #chat-hint-column {
+      display: flex;
+      flex-direction: column; /* Stack children vertically */
+      padding: 10px auto;
+    }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -111,27 +185,78 @@ body {
   globalThis.global = { initZ3: globalThis.initZ3 };
 </script>
 
-  <script type="module" crossorigin src="/assets/index-D5mD_G4Q.js"></script>
+  <script type="module" crossorigin src="/assets/index-DXioWRZO.js"></script>
 </head>
 <body>
     <div id="title">
     <h1>AI World Generator</h1> 
+<!-- moved to hints menu
     <div class="author">Built by:</div>
     <div class="author">Logan (Langchain integration, Phaser integration, Z3 integration)</div>
-    <!-- add yourselves as you add somthing to the project -->
-    <div class="github-link">
+    <div class="author">William (map generator, Z3 constraints)</div>
+     add yourselves as you add somthing to the project -->
+     <div>
+      <p style="display: inline; color: #727272">get the source at</p>
+    <div class="github-link" style="display: inline;">
         <a href="https://github.com/SentientDragon5/CMPM-118-LLM-Test" target="_blank">GitHub</a> 
+    </div>
     </div>
     </div>
       
     <div id="app"></div>  </div> 
 
+    <div id ="chat-hint-column">
+      <div id="button-container">
+        <button id="export-image-button" class="action-button">Export Image</button>
+        <button id="export-json-button" class="action-button">Export JSON</button>
+        <button id="load-json-button" class="action-button">Load JSON</button>
+      </div>
 <div id="chat-container">
   <div id="chat-output"></div>
+  <div id="chat-input" style="padding: 10px;">
   <textarea id="message-input"></textarea>
-  <button id="send-button">Send</button>
+  <button id="send-button">Send</button></div>
 </div>
-  
 
+
+<div id="hints-container">
+  <div id="hints-header">Hints</div>
+  <div id="hints-content">
+    <p>Welcome to the AI world Generator.</p>
+
+    <p>Built by:</p>
+    <p>Logan (Langchain integration, Phaser integration, Z3 integration)</p>
+    <p>William (map generator, Z3 constraints)</p>
+    <p>To get started, you can chat with the AI in natural language. To interface with the game world, you can give simple commands like</p>
+    <ul>
+      <li>Add a tree in the center</li>
+    </ul>
+    <p>which should do as the text suggests. you can try chaining some of these commands together even.</p>
+    <p>Try adding these elements:</p>
+    <ul>
+      <li>Tree</li>
+      <li>Wheelbarrow</li>
+      <li>Dirt</li>
+      <li>Mushroom</li>
+    </ul>
+    <p>You can also ask it to make a map out of grass or place a mushroom within a certain coordinate area or between two other objects.</p>
+    <p></p>
+  </div>
+</div>
+</div>  
+
+<script>
+  // JavaScript to toggle the hints content
+  const hintsHeader = document.getElementById('hints-header');
+  const hintsContent = document.getElementById('hints-content');
+
+  hintsHeader.addEventListener('click', () => {
+    if (hintsContent.style.display === 'none' || hintsContent.style.display === '') {
+      hintsContent.style.display = 'block';
+    } else {
+      hintsContent.style.display = 'none';
+    }
+  });
+</script>
 </body>
 </html>
