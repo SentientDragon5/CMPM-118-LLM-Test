@@ -33,7 +33,7 @@ function create() {
   gameScene = this.scene.add("Game", new Game(my), true); // Start the scene and pass myData
 
   const sysPrompt =
-    "I am a turn based game creation software. I can edit a 50 by 38 tile map where 0,0 is the top left hand corner and 50,38 is the bottom right hand corner. in my responses I only speak in Limericks";
+    "I am a turn based game creation software. I can edit a 50 by 38 tile map where 0,0 is the top left hand corner and 50,38 is the bottom right hand corner. I will provide concise and helpful answers.";
 
   initConvo(sysPrompt, log, my.tools);
 }
