@@ -38,3 +38,7 @@ Both parameters are the same API key from [Google AI studio](https://aistudio.go
 ## Testing
 
 Run `npm run dev` to open vite.
+
+## Credits
+
+Assets from: https://kenney.nl/assets/tiny-town
