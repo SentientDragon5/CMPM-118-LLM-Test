@@ -17,19 +17,6 @@ export default ({ mode }) => {
       },
     ],
 
-    // WASM and z3-solver Configuration
-    build: {
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            "z3-solver": ["z3-solver"],
-          },
-        },
-      },
-    },
-    optimizeDeps: {
-      include: ["z3-solver"],
-    },
     build: {
       target: "esnext", // Or a higher target that supports top-level await
       // ... other build options ...

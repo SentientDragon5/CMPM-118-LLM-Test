@@ -126,25 +126,22 @@ export class Game extends Phaser.Scene {
 
   displayWithinTool = tool(
     async ({ sprite, xMin, xMax, yMin, yMax }) => {
-      let answerSet = [];
-      answerSet = await this.checkPlace(xMin, xMax, yMin, yMax);
-      if (answerSet.length == 0) {
-        console.log("No valid positions found");
-        return "No valid positions available";
-      }
-      let randomSetIndex = Math.floor(Math.random() * answerSet.length);
-      console.log(randomSetIndex);
-      let randomCoord = answerSet[randomSetIndex];
-      let x = randomCoord.x * this.tileSize;
-      let y = randomCoord.y * this.tileSize;
-      console.log(answerSet);
+      // Simple random placement within the bounds
+      let x = xMin + Math.random() * (xMax - xMin);
+      let y = yMin + Math.random() * (yMax - yMin);
+
+      x = Math.floor(x) * this.tileSize;
+      y = Math.floor(y) * this.tileSize;
+
       console.log(
         "Displaying " + sprite + " at ",
         x / this.tileSize,
         ",",
         y / this.tileSize
       );
-      this.my.state.objects.push(this.add.sprite(x, y, sprite));
+      const obj = this.add.sprite(x, y, sprite);
+      obj.name = sprite;
+      this.my.state.objects.push(obj);
       return (
         sprite +
         " displayed (within) at " +
@@ -165,29 +162,6 @@ export class Game extends Phaser.Scene {
       description: "Displays a sprite within x max x min and y max and y min",
     }
   );
-  async checkPlace(xmin, xmax, ymin, ymax) {
-    const { Solver, Int, And, Or, Distinct, Not } = new this.my.Context("main");
-    const solver = new Solver();
-    const xvar = Int.const("x");
-    const yvar = Int.const("y");
-    solver.add(And(xvar.ge(xmin), xvar.le(xmax), yvar.ge(ymin), yvar.le(ymax)));
-    const results = new Set();
-    while ((await solver.check()) === "sat") {
-      const model = solver.model();
-      const xVal = parseInt(model.eval(xvar).asString());
-      const yVal = parseInt(model.eval(yvar).asString());
-
-      const coordStr = `${xVal},${yVal}`;
-      results.add(coordStr);
-
-      solver.add(Not(And(xvar.eq(xVal), yvar.eq(yVal))));
-    }
-
-    return Array.from(results).map((coord) => {
-      const [x, y] = coord.split(",").map(Number);
-      return { x, y };
-    });
-  }
 
   createMapTool = tool(
     async ({ sprite, x, y }) => {
