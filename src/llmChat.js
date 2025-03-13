@@ -9,14 +9,34 @@ import {
   SystemMessage,
 } from "@langchain/core/messages";
 
-console.log("WOrking up until now");
 //dotenv.config(); // Load environment variables from .env file
 
-const llm = new ChatGoogleGenerativeAI({
-  modelName: "gemini-1.5-flash",
-  temperature: 0.5,
-  apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
-});
+let llm; // Declare llm outside the function
+
+async function initializeLLM(apiKey) {
+  llm = new ChatGoogleGenerativeAI({
+    modelName: "gemini-1.5-flash",
+    temperature: 0.5,
+    apiKey: apiKey,
+  });
+
+  llmWithTools = llm.bindTools(tools); // Initial binding
+}
+
+// Function to get API key from local storage or prompt user
+async function getApiKey() {
+  let apiKey = localStorage.getItem("googleApiKey");
+  if (!apiKey) {
+    apiKey = prompt("Please enter your Google API key:");
+    if (apiKey) {
+      localStorage.setItem("googleApiKey", apiKey);
+    } else {
+      alert("API key is required to use this application.");
+      return null; // Or handle the missing API key appropriately
+    }
+  }
+  return apiKey;
+}
 
 const addTool = tool(
   async ({ a, b }) => {
@@ -49,7 +69,7 @@ const multiplyTool = tool(
 );
 
 let tools = [addTool, multiplyTool]; // Initialize tools here
-let llmWithTools = llm.bindTools(tools); // Initial binding
+let llmWithTools; // Initial binding
 let messages = [];
 
 const toolsByName = {
@@ -88,6 +108,15 @@ async function aiTurn(text) {
 var log;
 async function initConvo(sysPrompt, logFunc, moreTools) {
   log = logFunc;
+
+  // Get API key
+  const apiKey = await getApiKey();
+  if (!apiKey) {
+    return; // Or handle the missing API key appropriately
+  }
+
+  // Initialize LLM with API key
+  await initializeLLM(apiKey);
 
   // Rebind tools with more tools
   tools = [...tools, ...moreTools];
