@@ -23,3 +23,5 @@ export default ({ mode }) => {
     },
   });
 };
+
+// when building, make sure to drag the assets folder into the dist assets folder

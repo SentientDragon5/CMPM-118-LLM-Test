@@ -27,7 +27,7 @@ async function initializeLLM(apiKey) {
 async function getApiKey() {
   let apiKey = localStorage.getItem("googleApiKey");
   if (!apiKey) {
-    apiKey = prompt("Please enter your Google API key:");
+    apiKey = prompt("Please enter your Google Gemini API key. You can get one from [Google AI Studio](https://aistudio.google.com/app/apikey):");
     if (apiKey) {
       localStorage.setItem("googleApiKey", apiKey);
     } else {
