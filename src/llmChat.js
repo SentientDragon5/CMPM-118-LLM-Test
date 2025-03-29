@@ -15,7 +15,7 @@ let llm; // Declare llm outside the function
 
 async function initializeLLM(apiKey) {
   llm = new ChatGoogleGenerativeAI({
-    modelName: "gemini-1.5-flash",
+    modelName: "gemini-2.0-flash",
     temperature: 0.5,
     apiKey: apiKey,
   });
@@ -27,7 +27,9 @@ async function initializeLLM(apiKey) {
 async function getApiKey() {
   let apiKey = localStorage.getItem("googleApiKey");
   if (!apiKey) {
-    apiKey = prompt("Please enter your Google Gemini API key. You can get one from [Google AI Studio](https://aistudio.google.com/app/apikey):");
+    apiKey = prompt(
+      "Please enter your Google Gemini API key. You can get one from [Google AI Studio](https://aistudio.google.com/app/apikey):"
+    );
     if (apiKey) {
       localStorage.setItem("googleApiKey", apiKey);
     } else {

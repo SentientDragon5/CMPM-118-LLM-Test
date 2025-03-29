@@ -11,13 +11,25 @@ export class Game extends Phaser.Scene {
     my.tools.push(
       ...[
         this.displayAtTool,
-        this.displayWithinTool,
+        //this.displayWithinTool,
         this.displayTextAtTool,
         this.createMapTool,
         this.removeTool,
       ]
     );
     this.tileSize = 16;
+    my.assets.push(
+      ...[
+        "person",
+        "dirt",
+        "grass",
+        "flower_grass",
+        "bush",
+        "tree",
+        "mushroom",
+        "wheelbarrow",
+      ]
+    );
   }
 
   init() {
@@ -38,10 +50,10 @@ export class Game extends Phaser.Scene {
   preload() {
     this.load.setPath("./assets/");
 
-    this.load.image("blue", "blue_townie.png");
+    this.load.image("person", "blue_townie.png");
     this.load.image("dirt", "dirt.png");
     this.load.image("grass", "grass.png");
-    this.load.image("flower grass", "flower_grass.png");
+    this.load.image("flower_grass", "flower_grass.png");
     this.load.image("bush", "bush.png");
     this.load.image("tree", "tree.png");
     this.load.image("mushroom", "mushroom.png");

@@ -10,6 +10,7 @@ var my = {
     messages: [],
   },
   tools: [],
+  assets: [],
 };
 
 // game config
@@ -30,7 +31,11 @@ function create() {
   gameScene = this.scene.add("Game", new Game(my), true); // Start the scene and pass myData
 
   const sysPrompt =
-    "I am a turn based game creation software. I can edit a 50 by 38 tile map where 0,0 is the top left hand corner and 50,38 is the bottom right hand corner. I will provide concise and helpful answers. I have the ability to place objects on the map. If you are not given precise coordinates, you can approximate them.";
+    "I am a turn based game creation software. I can edit a 50 by 38 tile map where 0,0 is the top left hand corner " +
+    "and 50,38 is the bottom right hand corner. I will provide concise and helpful answers. I have the ability to place objects on the map. " +
+    "If you are not given precise instructions, you can approximate. For background maps assume the user means for the whole map. " +
+    "I have the following assets: " +
+    my.assets.join(",  ");
 
   initConvo(sysPrompt, log, my.tools);
 }
