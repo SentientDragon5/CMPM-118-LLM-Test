@@ -1,7 +1,7 @@
 # LLM Map Maker
 
 Try the Build here: [Open Page](https://llm-map-test.netlify.app/)
-
+You will need a Gemini API key to run. [Get an API key here](https://aistudio.google.com/apikey)
 
 ## Description
 
